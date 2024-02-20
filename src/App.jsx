@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import Navbar from './components/Navbar'
 import { v4 as uuidv4 } from 'uuid';
-// ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+// import { i } from 'vite/dist/node/types.d-jgA8ss1A';
+
+
 
 
 function App() {
@@ -15,10 +16,22 @@ const [todos, settodos] = useState([])
     settodo("")
     console.log(todos)
    }
-  const handleEdit=() => { 
+  const handleEdit=(e,id) => { 
+    let t=todos.filter(i=>i.id===id)
+    settodo(t[0].todo)
+    let newTodos=todos.filter((item) => { 
+      return item.id!==id
+     })
+    settodos(newTodos)
+
     
    }
-  const handleDelete=() => { 
+  const handleDelete=(e,id) => { 
+      let newTodos=todos.filter((item) => { 
+        return item.id!==id
+       })
+      settodos(newTodos)
+
    
    }
 
@@ -46,13 +59,16 @@ const [todos, settodos] = useState([])
       <div className="addTodo my-5">
         <h1 className='text-lg font-bold'>Add a Todo</h1>
       <input type="text" className='w-80 outline-none' onChange={handleChange} value={todo} />
-      <button onClick={handleAdd} className='bg-purple-700 text-white p-1 rounded-md text-sm mx-3 cursor-pointer hover:bg-purple-900'>Add Todo</button>
+      <button onClick={handleAdd} className='bg-purple-700 text-white p-1 rounded-md text-sm mx-3 cursor-pointer hover:bg-purple-900'>Save</button>
       </div>
       <h1 className='text-xl font-bold'>YOUR TODOS</h1>
 
       <div className="todos">
+        {todos.length ===0 && <div className='m-5'>No Todos to Display</div>}
         {todos.map(item=>{
         return<div key={item.id} className="todo flex w-1/2  my-3 justify-between">
+
+        <div className='flex gap-5'>
           <input onChange={handleCheckbox} type="checkbox"  value={item.isCompleted} name={item.id} id=''/>
           <div className={item.isCompleted? "line-through":""}>
             <div className='text-xl'>
@@ -60,9 +76,10 @@ const [todos, settodos] = useState([])
             </div>
 
             </div>
+          </div>
           <div className="buttons">
-            <button onClick={handleEdit} className='bg-purple-700 text-white p-2 rounded-md text-sm mx-2 cursor-pointer hover:bg-purple-900'>Edit</button>
-            <button onClick={handleDelete} className='bg-purple-700 text-white p-2 rounded-md text-sm mx-2 cursor-pointer hover:bg-purple-900'>Delete</button>
+            <button onClick={(e) =>{ handleEdit(e,item.id) }} className='bg-purple-700 text-white p-2 rounded-md text-sm mx-2 cursor-pointer hover:bg-purple-900'>Edit</button>
+            <button onClick={(e)=>{handleDelete(e,item.id)}} className='bg-purple-700 text-white p-2 rounded-md text-sm mx-2 cursor-pointer hover:bg-purple-900'>Delete</button>
           </div>
 
         </div>
